@@ -2,10 +2,11 @@
 
 This repo reads from a google spreadsheet, and formats the data to be easier to read.
 
-[Source Spreadsheet](https://docs.google.com/spreadsheets/d/1-l36tKe7PT3P1iYVJ4H7WpYfG5t0yXXTuH6wlFBbegY/edit#gid=0)
+[Source Spreadsheet](https://docs.google.com/spreadsheets/d/1RLh9_ngYeFksDgfoTbcgWT9jg1el3Up_v2RMmLoUTAo/edit?usp=sharing)
 
-[Formatted Webpage](http://caseywatts.com/dcrawhides-linedances)
+The original code is from Casey Watts, but to maintain the spreadsheet we had to move it into a new repository.
 
+From Casey:
 ## Technical background
 
 ## Technology Used
