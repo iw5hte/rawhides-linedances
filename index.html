@@ -1,0 +1,491 @@
+<head>
+  <!-- <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/tachyons/4.11.1/tachyons.min.css"> -->
+</head>
+<body>
+  <h1>DC Rawhides Line Dances</h1>
+  <div class="grid-3 sort-section">
+    <a href="?sort=name" class="video-link">Sort By Name</a>
+    <a href="?sort=difficulty" class="video-link">Sort By Difficulty</a>
+    <a href="?sort=timesdanced" class="video-link">Sort By Frequency</a>
+  </div>
+  <div id="dance-cards-container">
+    <div class="loading-spacer">
+      <div class="video-link loading-rainbow"></div>
+    </div>
+  </div>
+  <div id="contribute" class="contribute-section grid-2">
+    <div>
+      <div class="contribute-header">
+        Add or Edit Content
+      </div>
+      <div class="grid-2">
+        <div class="video-link">
+          <div class="contribute-subheader">
+            What?
+          </div>
+          <div class="contribute-text">
+            We especially need instructional videos, example videos, and stepsheets where they are missing. Please add any that are similar to the way DC Rawhides does the dances.
+          </div>
+        </div>
+        <div class="video-link">
+          <div class="contribute-subheader">
+            How?
+          </div>
+          <div class="contribute-text">
+            Request access to <a href="https://docs.google.com/spreadsheets/d/1-l36tKe7PT3P1iYVJ4H7WpYfG5t0yXXTuH6wlFBbegY/edit#gid=0">this Google Spreadsheet</a> and edit it there directly yourself. This page will automatically update after refreshing the page (and maybe some time delay).
+          </div>
+          <div class="contribute-text">
+            Or, open the spreadsheet and comment on the cell that should be added to or changed. Someone with spreadsheet access will eventually put it into the spreadsheet directly.
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="contribute-header">
+        How This Works
+      </div>
+      <div class="video-link">
+        <div class="contribute-text">
+          This page reads data from a Google Spreadsheet, and displays it in a pretty way using Javascript in the browser. When the Google Spreadsheet gets updated, this page also gets updated automatically (after some time delay, and maybe a page refresh).
+        </div>
+        <div class="contribute-text">
+          Want to improve how the page looks visually? Or want to see how this works? Check out the <a href="https://github.com/caseywatts/dcrawhides-linedances">source code</a>.
+        </div>
+      </div>
+    </div>
+  </div>
+  <style>
+    :root {
+      --rawhides-blue: #1392f0;
+      --rawhides-red: #bf3a31;
+      --background-blue: #ECF5FC;
+      --other-blue: #6dc8ca;
+      --difficulty-beginner: green;
+      --difficulty-intermediate: blue;
+      --difficulty-advanced: purple;
+    }
+
+    body {
+      font-family: sans-serif;
+      background: white;
+      margin: 0px;
+      padding: 0px;
+    }
+
+    h1 {
+      text-align: center;
+      padding: 0px;
+      margin: 0px;
+      color: white;
+      background-color: black;
+      padding: 20px;
+      font-size: 4em;
+      border-bottom: 8px solid var(--rawhides-red);
+    }
+    h4 {
+      text-align: center;
+      padding: 0px;
+      margin: 0px;
+      padding-bottom: 20px;
+      color: white;
+      background: black;
+    }
+
+    .active-link {
+      filter: brightness(95%);
+    }
+
+    .contribute-please-container {
+      margin: auto;
+      margin-top: 20px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    .contribute-please {
+      display: inline-block;
+      text-align: center;
+      padding: 10px;
+      border: 1px solid green;
+      border-radius: 15px;
+      font-size: 1.2em;
+      background: var(--rawhides-blue-light);
+    }
+
+    .sort-section {
+      max-width: 400px;
+      margin: auto;
+      margin-top: 20px;
+    }
+
+    .loading-spacer {
+      height: 100vh;
+      padding-right: 25vw;
+      padding-left: 25vw;
+      padding-top: 25vh;
+      padding-bottom: 25vh;
+    }
+
+    .loading-rainbow {
+      position: relative;
+      overflow: hidden;
+      height: 5vh;
+    }
+
+    .loading-rainbow:after {
+      content: '';
+      position: absolute;
+      top:0%;
+      left:0%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(285deg,
+        transparent,
+        rgba(255, 0 , 0, .1),
+        rgba(255, 127, 0, .1),
+        rgba(255, 255, 0, .1),
+        rgba(0, 255, 0, .1),
+        rgba(0, 0, 255, .1),
+        /* rgba(75, 0, 130, .1), */
+        rgba(148, 0, 211, .1),
+        transparent
+      );
+      /* background: linear-gradient(100deg,transparent,transparent,rgba(255,0,0,.1),transparent,transparent); */
+
+      transform: translateX(-100%);
+      animation: loading .9s infinite;
+    }
+
+    @keyframes loading {
+      100% {
+        transform: translateX(100%);
+      }
+    }
+
+    #dance-cards-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      grid-auto-rows: auto;
+      grid-gap: 1rem;
+    }
+    @media only screen and (max-device-width: 500px) {
+      #dance-cards-container {
+        display: block;
+      }
+    }
+    .dance-card {
+      margin: 30px;
+      border: 3px solid var(--rawhides-blue);
+      box-shadow: 3px 3px 8px grey;
+      border-radius: 15px;
+      padding: 10px;
+      background: var(--background-blue);
+    }
+    .dance-name {
+      text-align: center;
+      color: var(--rawhides-red);
+      font-weight: bold;
+      font-size: 1.5em;
+      padding: 10px;
+    }
+
+    .subtitle {
+      align-items: center;
+      padding: 10px;
+      font-size: 1em;
+      text-align: center;
+    }
+    .subtitle-times-danced {
+      font-size: 1em;
+    }
+    .subtitle-times-danced-number {
+      font-size: 1.5em;
+    }
+
+    .video-links-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    }
+    .video-link {
+      display: block;
+      border: 1px solid var(--rawhides-blue);
+      border-radius: 15px;
+      background: white;
+      margin: 10px;
+      padding: 10px;
+      text-align: center;
+      text-decoration: none;
+    }
+    .video-link:hover {
+      filter: brightness(95%);
+    }
+    .video-link-disabled {
+      background: #EEEEEE;
+    }
+
+    .grid-1 {
+      display: grid;
+      grid-template-columns: minmax(100px, 1fr);
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: minmax(100px, 1fr) minmax(100px, 1fr);
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: minmax(100px, 1fr) minmax(100px, 1fr) minmax(100px, 1fr);
+    }
+
+    .col-header {
+      text-align: center;
+      font-size: 1.2em;
+      color: var(--rawhides-red);
+      margin-top: 20px;
+    }
+
+    .difficulty-level {
+      font-size: 1.2em;
+      display: inline-block;
+      color: white;
+      padding: 5 10;
+      border-radius: 15px;
+      text-align: center;
+    }
+    .difficulty-beginner {
+      background: var(--difficulty-beginner);
+      filter: brightness(140%);
+    }
+    .difficulty-intermediate {
+      background: var(--difficulty-intermediate);
+      filter: brightness(140%);
+    }
+    .difficulty-advanced {
+      background: var(--difficulty-advanced);
+      filter: brightness(140%);
+    }
+
+    .contribute-section {
+      background-color: var(--background-blue);
+      padding: 30px;
+      border-top: 5px solid var(--rawhides-blue);
+      text-align: center;
+      line-height: 1.3em;
+    }
+    .contribute-header {
+      font-size: 1.5em;
+      color: var(--rawhides-red);
+      margin: 20px;
+    }
+    .contribute-subheader {
+      font-size: 1.2em;
+      color: var(--rawhides-red);
+      margin: 20px;
+    }
+    .contribute-text {
+      text-align: left;
+      margin: 10px;
+    }
+  </style>
+  <script>
+    function getQueryVariable(variable)
+    {
+      var query = window.location.search.substring(1);
+      var vars = query.split("&");
+      for (var i=0;i<vars.length;i++) {
+        var pair = vars[i].split("=");
+        if(pair[0] == variable){return pair[1];}
+      }
+      return(false);
+    }
+
+    (async () => {
+      (function highlightLinkToCurrentPage() {
+        const linkToCurrentPage = document.querySelector(`[href='${window.location.search}']`);
+        if (linkToCurrentPage) {
+          linkToCurrentPage.classList.add('active-link');
+        }
+      })()
+
+      // supporting functions
+
+      const fetchData = async () => {
+        const spreadsheetCsvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQDW1ns_NQthzkp1uPFCF8OmoGyaEj_U-iA-ObRsBJefjqZf0uV01gx7mlOpVSI2HThLKQmJfGRzzaR/pub?output=csv"
+        const dataStream = await fetch(spreadsheetCsvUrl)
+        const dataStreamText = await dataStream.text()
+
+        var lines = dataStreamText.split(/\r\n|\n/);
+        var headings = lines.shift().split(',');
+        var parsedData = [];
+
+        while (lines.length > 0) {
+            var danceEntry = new Map();
+            var columns = lines.shift().split(',')
+
+            for (var j = 0; j < columns.length; j++) {
+                danceEntry.set(headings[j], columns[j]);
+            }
+            parsedData.push(danceEntry);
+        }
+        return parsedData;
+      }
+
+      const mungeDanceData = (danceData) => {
+        return danceData.map((danceEntry) => {
+          const exampleVideos = [
+            danceEntry.get('Example Video'),
+            danceEntry.get('Example 2'),
+          ].filter(x => x) // remove any that are empty
+
+          const instructionVideos = [
+            danceEntry.get('Instruction Video'),
+            danceEntry.get('Instruction 2'),
+          ].filter(x => x) // remove any that are empty
+
+          return {
+            name: danceEntry.get('Dance Name'),
+            difficulty: danceEntry.get('Difficulty'),
+            type: danceEntry.get('Line Dance vs. Partner Dance'),
+            timesDanced: danceEntry.get('# of times danced in past 12 months'),
+            percentDanced: danceEntry.get('percent danced in past 12 months'),
+            exampleVideos: exampleVideos,
+            instructionVideos: instructionVideos,
+            stepsheet: danceEntry.get('Stepsheet'),
+          }
+        })
+      }
+
+      const sortAndFilterDanceData = (danceData, sort) => {
+        const sortByName = (danceA, danceB) => {
+          return danceA.name.localeCompare(danceB.name)
+        }
+        const sortByDifficulty = (danceA, danceB) => {
+          return danceA.difficulty.localeCompare(danceB.difficulty)
+        }
+        const sortByTimesDanced = (danceA, danceB) => {
+          return parseInt(danceB.timesDanced) - parseInt(danceA.timesDanced)
+        }
+
+        const filteredList = danceData
+          .filter(dance => dance.timesDanced > 0)
+
+        if (sort === "name") {
+          console.log('name')
+          return filteredList.sort(sortByName)
+        } else if (sort === "difficulty") {
+          console.log('difficulty')
+          return filteredList.sort(sortByDifficulty)
+        } else if (sort === "timesdanced") {
+          console.log('timesdanced')
+          return filteredList.sort(sortByTimesDanced)
+        } else {
+          return filteredList.sort(sortByName)
+        }
+      }
+
+      const componentExampleVideos = function(urls) {
+        if (urls.length > 0) {
+          return urls.map((url, index) => {
+            const videoNumber = index + 1
+            if (videoNumber === 1) {
+              return `<a class="video-link" href="${url}">Example Video</a>`
+            } else {
+              return `<a class="video-link" href="${url}">Example Video ${videoNumber}</a>`
+            }
+          }).join('') // no commas between elements
+        } else {
+          return '<a href="#contribute" class="video-link video-link-disabled">No Example Videos. Add one?</a>'
+        }
+      }
+
+      const componentInstructionVideos = function(urls) {
+        if (urls.length > 0) {
+          return urls.map((url, index) => {
+            const videoNumber = index + 1
+            if (videoNumber === 1) {
+              return `<a class="video-link" href="${url}">Instruction Video</a>`
+            } else {
+              return `<a class="video-link" href="${url}">Instruction Video ${videoNumber}</a>`
+            }
+          }).join('') // no commas between elements
+        } else {
+          return '<a href="#contribute" class="video-link video-link-disabled">No Instruction Videos. Add one?</a>'
+        }
+      }
+
+      const componentStepsheetLink = function(title, url) {
+        if (url) {
+          return `<a class="stepsheet video-link" href="${url}">${title}</a>`
+        } else {
+          return `<a href="#contribute" href="#contribute" class="stepsheet video-link video-link-disabled">No Stepsheet Available. Add one?</a>`
+        }
+      }
+
+      const componentSongs = function() {
+        return `
+          <a href="https://docs.google.com/spreadsheets/d/1-l36tKe7PT3P1iYVJ4H7WpYfG5t0yXXTuH6wlFBbegY/edit#gid=2072603583" class="video-link">Songs - see spreadsheet</a>
+        `
+      }
+
+      const componentDanceCard = (dance) => {
+        const difficultyCSS = {
+          "1 Beginner": 'difficulty-level difficulty-beginner',
+          "2 Intermediate": 'difficulty-level difficulty-intermediate',
+          "3 Advanced": 'difficulty-level difficulty-advanced'
+        };
+        const difficultyClass = difficultyCSS[dance.difficulty]
+        return `
+          <div class="dance-card">
+            <div class="dance-name">${dance.name}</div>
+            <div class="grid-2 subtitle">
+              <div class="subtitle-dance-difficulty">
+                <div class="${difficultyClass}">${dance.difficulty}</div>
+              </div>
+              <div class="subtitle-times-danced">
+                <div>danced at</div>
+                <div class="subtitle-times-danced-number">${dance.percentDanced}</div>
+                <div>of recent events</div>
+              </div>
+            </div>
+            <div class="grid-1">
+              ${componentStepsheetLink("Stepsheet", dance.stepsheet)}
+            </div>
+            <div class="col-header">Videos</div>
+            <div class="grid-2">
+              <div>
+                ${componentExampleVideos(dance.exampleVideos)}
+              </div>
+              <div>
+                ${componentInstructionVideos(dance.instructionVideos)}
+              </div>
+            </div>
+            <div class="grid-1">
+              ${componentSongs()}
+            </div>
+          </div>
+        `
+      }
+
+      const replaceContentsOfPage = (pageContents) => {
+        document.querySelector('#dance-cards-container').innerHTML = pageContents
+      }
+
+      // Initialization begins here
+      const loadPageContent = (filter) => {
+        const sortedAndFilteredDances = sortAndFilterDanceData(dances, getQueryVariable('sort'))
+        const allDanceCards = sortedAndFilteredDances.map((dance) => {
+          return componentDanceCard(dance)
+        }).join('') // no commas between cards
+        if (window.location.href.includes('donotload')) {
+          // noop
+        } else {
+          replaceContentsOfPage(allDanceCards);
+        }
+      }
+
+      const danceData = await fetchData()
+      const dances = mungeDanceData(danceData)
+      loadPageContent()
+    })()
+  </script>
+</body>
